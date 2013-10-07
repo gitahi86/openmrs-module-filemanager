@@ -1,5 +1,6 @@
 <%
 ui.decorateWith("appui", "standardEmrPage")
+ui.includeJavascript("uicommons", "typeahead.js");
 %>
 
 ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ]) }
@@ -11,6 +12,10 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
         <form class="simple-form-ui" id="uploadFile" method="post"
         enctype="multipart/form-data">
             <input type="file" name="file" id="file" multiple="true">
+            <input type="text" id="typeahead" data-provide="typeahead"
+                placeholder="Description">
+            <textarea name="notes" placeholder="Notes"></textarea>
+
             <input type="submit" value="Upload">
         </form>
     </fieldset>
@@ -45,8 +50,18 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
 </table>
 
 <script type="text/javascript">
+    var jq = jQuery;
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("filemanager.label")}"}
     ];
+
+    jq('#typeahead').typeahead({
+        source: function() {
+            var descriptions = "${defaultDescriptions}";
+            return descriptions.split(',');
+        },
+        //prefetch: '${ui.resourceLink("filemanager", "filetypes.json")}', 
+        items: 3
+    })
 </script>

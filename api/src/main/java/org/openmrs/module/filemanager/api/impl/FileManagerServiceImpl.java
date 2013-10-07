@@ -81,7 +81,7 @@ public class FileManagerServiceImpl extends BaseOpenmrsService implements FileMa
 		encounter.setEncounterDatetime(date);
 		encounter.setLocation(location);
 		encounter.setEncounterType(encounterService.getEncounterType(8));
-		encounter.setCreator(null);
+		encounter.setCreator(Context.getAuthenticatedUser());
 		encounterService.saveEncounter(encounter);
 
 		Set<Obs> obsSet = new HashSet<Obs>();

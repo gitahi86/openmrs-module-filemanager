@@ -4,6 +4,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.Visit;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
 import org.openmrs.module.filemanager.api.FileManagerService;
@@ -26,6 +27,8 @@ import java.util.Map;
 
 public class FileManagerPageController {
 
+    private AdministrationService administrationService = Context.getAdministrationService();
+
 	public void controller(@RequestParam("patientId") Patient patient,
 						   PageModel model,
 						   @InjectBeans PatientDomainWrapper patientDomainWrapper) {
@@ -44,6 +47,8 @@ public class FileManagerPageController {
 
 		model.addAttribute("patient", patientDomainWrapper);
 		model.addAttribute("files", personList);
+        model.addAttribute("defaultDescriptions", 
+            administrationService.getGlobalProperty("filemanager.defaultDescriptions"));
 	}
 
 	public String post(@RequestParam("patientId") Patient patient,
