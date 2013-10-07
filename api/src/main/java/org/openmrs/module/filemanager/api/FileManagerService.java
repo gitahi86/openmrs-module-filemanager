@@ -17,26 +17,26 @@ import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.OpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
  * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
- * <p>
+ * <p/>
  * It can be accessed only via Context:<br>
  * <code>
  * Context.getService(FileManagerService.class).someMethod();
  * </code>
- * 
+ *
  * @see org.openmrs.api.context.Context
  */
 @Transactional
 public interface FileManagerService extends OpenmrsService {
-     
+
 	/*
 	 * Add service methods here
 	 * 
 	 */
-    public void saveComplexObs(Patient patient,Visit visit,File file,String description,String type) throws IOException;
+	public void saveComplexObs(Patient patient, Visit visit, MultipartFile file, String description, String type) throws IOException;
 }

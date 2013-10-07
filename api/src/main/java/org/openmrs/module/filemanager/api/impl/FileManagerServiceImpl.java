@@ -13,14 +13,15 @@
  */
 package org.openmrs.module.filemanager.api.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.*;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.filemanager.api.FileManagerService;
 import org.openmrs.module.filemanager.api.db.FileManagerDAO;
 import org.openmrs.obs.ComplexData;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,43 +33,54 @@ import java.util.Date;
  * It is a default implementation of {@link FileManagerService}.
  */
 public class FileManagerServiceImpl extends BaseOpenmrsService implements FileManagerService {
-	
+
 	protected final Log log = LogFactory.getLog(this.getClass());
-	
+
 	private FileManagerDAO dao;
-	
+
 	/**
-     * @param dao the dao to set
-     */
-    public void setDao(FileManagerDAO dao) {
-	    this.dao = dao;
-    }
-    
-    /**
-     * @return the dao
-     */
-    public FileManagerDAO getDao() {
-	    return dao;
-    }
+	 * @param dao the dao to set
+	 */
+	public void setDao(FileManagerDAO dao) {
+		this.dao = dao;
+	}
 
-    public void saveComplexObs(Patient patient,Visit visit,File file,String description,String type) throws IOException {
+	/**
+	 * @return the dao
+	 */
+	public FileManagerDAO getDao() {
+		return dao;
+	}
 
-        ConceptComplex conceptComplex = Context.getConceptService().getConceptComplex(1867);
+	public void saveComplexObs(Patient patient, Visit visit, MultipartFile file, String description, String notes) throws IOException {
+
+        Encounter encounter=new Encounter();
+        encounter.setEncounterDatetime(new Date());
+        encounter.setPatient(patient);
+        encounter.setLocation(new Location());
+
+        Obs descriptionObs = new Obs(patient, null, new Date(), new Location());
+        Obs notesObs = new Obs(patient, null, new Date(), new Location());
+
+        ConceptComplex conceptComplex = Context.getConceptService().getConceptComplex(246);
         // this is assumed to have happened
         // conceptComplex.setHandler("ImageHandler");
-
+        //Patient patient1=Context.getPatientService().getPatientByUuid("cf35bf16-2d28-4433-a0da-fe1fae6d6085");
         // Set the required properties.
-        Obs obs = new Obs(new Person(48609), conceptComplex, new Date(), new Location());
+        Obs obs = new Obs(patient, conceptComplex, new Date(), new Location());
 
-        BufferedImage img = ImageIO.read(new File("/home/bmckown/Desktop/test/logo.png"));
+        //BufferedImage img = ImageIO.read(new File("/home/harsha/Downloads/me.jpg"));
 
-        // or:
-        // InputStream img = new FileInputStream(new File("folder", "filename"));
+        BufferedImage img = ImageIO.read((File) file);
 
-        ComplexData complexData = new ComplexData("test-image.jpg", img);
+        ComplexData complexData = new ComplexData(file.getName(), img);
+
         obs.setComplexData(complexData);
 
         Context.getObsService().saveObs(obs, null);
+
+        encounter.addObs(obs);
+
     }
 
 }
