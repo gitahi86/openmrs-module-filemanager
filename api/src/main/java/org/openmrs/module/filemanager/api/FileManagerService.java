@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.filemanager.api;
 
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.OpenmrsService;
@@ -38,5 +39,5 @@ public interface FileManagerService extends OpenmrsService {
 	 * Add service methods here
 	 * 
 	 */
-	public void saveComplexObs(Patient patient, Visit visit, MultipartFile file, String description, String type) throws IOException;
+	public Encounter saveComplexObs(Patient patient, Visit visit, MultipartFile file, String description, String type) throws IOException;
 }

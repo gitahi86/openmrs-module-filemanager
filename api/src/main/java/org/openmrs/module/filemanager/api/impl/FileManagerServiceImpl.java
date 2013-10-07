@@ -16,6 +16,11 @@ package org.openmrs.module.filemanager.api.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.*;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.EncounterService;
+import org.openmrs.api.LocationService;
+import org.openmrs.api.ObsService;
+import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.filemanager.api.FileManagerService;
@@ -26,8 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * It is a default implementation of {@link FileManagerService}.
@@ -52,35 +61,79 @@ public class FileManagerServiceImpl extends BaseOpenmrsService implements FileMa
 		return dao;
 	}
 
-	public void saveComplexObs(Patient patient, Visit visit, MultipartFile file, String description, String notes) throws IOException {
+	public Encounter saveComplexObs(Patient patient, Visit visit, MultipartFile file, String description, String notes) throws IOException {
 
-        Encounter encounter=new Encounter();
-        encounter.setEncounterDatetime(new Date());
-        encounter.setPatient(patient);
-        encounter.setLocation(new Location());
+		LocationService locationService = Context.getLocationService();
+		ConceptService conceptService = Context.getConceptService();
+		ObsService obsService = Context.getObsService();
+		EncounterService encounterService = Context.getEncounterService();
 
-        Obs descriptionObs = new Obs(patient, null, new Date(), new Location());
-        Obs notesObs = new Obs(patient, null, new Date(), new Location());
+		Location location = locationService.getDefaultLocation();
+		Concept fileDescriptionConcept = conceptService.getConcept(247);
+		Concept fileNotesConcept = conceptService.getConcept(248);
+		ConceptComplex conceptComplex = conceptService.getConceptComplex(246);
 
-        ConceptComplex conceptComplex = Context.getConceptService().getConceptComplex(246);
-        // this is assumed to have happened
-        // conceptComplex.setHandler("ImageHandler");
-        //Patient patient1=Context.getPatientService().getPatientByUuid("cf35bf16-2d28-4433-a0da-fe1fae6d6085");
-        // Set the required properties.
-        Obs obs = new Obs(patient, conceptComplex, new Date(), new Location());
+		Date date = visit.getStartDatetime();
 
-        //BufferedImage img = ImageIO.read(new File("/home/harsha/Downloads/me.jpg"));
+		Encounter encounter = new Encounter();
+		encounter.setPatient(patient);
+		encounter.setVisit(visit);
+		encounter.setEncounterDatetime(date);
+		encounter.setLocation(location);
+		encounter.setEncounterType(encounterService.getEncounterType(8));
+		encounter.setCreator(null);
+		encounterService.saveEncounter(encounter);
 
-        BufferedImage img = ImageIO.read((File) file);
+		Set<Obs> obsSet = new HashSet<Obs>();
 
-        ComplexData complexData = new ComplexData(file.getName(), img);
+		Obs descriptionObs = new Obs(patient, fileDescriptionConcept, date, location);
+		descriptionObs.setValueText(description);
+		descriptionObs.setEncounter(encounter);
+		obsService.saveObs(descriptionObs, null);
 
-        obs.setComplexData(complexData);
+		Obs notesObs = new Obs(patient, fileNotesConcept, date, location);
+		notesObs.setValueText(notes);
+		descriptionObs.setEncounter(encounter);
+		obsService.saveObs(notesObs, null);
 
-        Context.getObsService().saveObs(obs, null);
+		Obs fileObs = new Obs(patient, conceptComplex, date, location);
+		fileObs.setEncounter(encounter);
+		File tmpFile = multipartToFile(file);
+		saveAndTransferFileComplexObs(fileObs, tmpFile);
 
-        encounter.addObs(obs);
+		obsSet.add(descriptionObs);
+		obsSet.add(notesObs);
+		obsSet.add(fileObs);
+		obsSet.add(fileObs);
 
-    }
+
+		encounter.setObs(obsSet);
+
+		return encounter;
+	}
+
+	public File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
+		File tmpFile = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") +
+				multipart.getOriginalFilename());
+		multipart.transferTo(tmpFile);
+		return tmpFile;
+	}
+
+	public void saveAndTransferFileComplexObs(Obs obs, File tempFile) {
+
+		try {
+			String mergedUrl = tempFile.getCanonicalPath();
+			InputStream out1 = new FileInputStream(new File(mergedUrl));
+
+			ComplexData complexData = new ComplexData(obs.getPerson().getId() + "-" + Math.random() + "-" + tempFile.getName(), out1);
+			obs.setComplexData(complexData);
+
+			Context.getObsService().saveObs(obs, null);
+			tempFile.delete();
+
+		} catch (Exception e) {
+			log.error(e);
+		}
+	}
 
 }

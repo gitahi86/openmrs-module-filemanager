@@ -1,5 +1,6 @@
 package org.openmrs.module.filemanager.page.controller;
 
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.Visit;
@@ -56,7 +57,7 @@ public class FileManagerPageController {
 			if (!file.isEmpty()) {
 				if (file.getSize() <= 5242880) {
 					try {
-						Context.getService(FileManagerService.class).saveComplexObs(patient, visit, file,"", "");
+						Encounter encounter = Context.getService(FileManagerService.class).saveComplexObs(patient, visit, file,"File Description", "File Notes");
 						FileOutputStream fos = new FileOutputStream("/home/gitahi/aaaaa2.jpg");
 						fos.write(file.getBytes());
 						fos.close();
