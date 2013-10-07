@@ -40,7 +40,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
         <% files.each { f -> %>
 
         <tr id="visit">
-            <td><a href="download?fileName=${f.name}">${f.name}</a></td>
+            <td><a href="download.page?fileName=${f.name}">${f.name}</a></td>
             <td>${f.description}</td>
             <td>${f.notes}</td>
         </tr>
