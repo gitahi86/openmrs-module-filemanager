@@ -33,20 +33,19 @@ public class FileManagerPageController {
 						   PageModel model,
 						   @InjectBeans PatientDomainWrapper patientDomainWrapper) {
 
-		List<Person> personList = new ArrayList<Person>();
-		for (int i = 1; i <= 10; i++) {
-			Person p = new Person();
-			p.setPersonId(i);
-			p.setBirthdate(new Date());
-			p.setGender("Type " + i);
-			p.setPersonVoidReason("Link " + i);
-			personList.add(p);
-		}
+        List<UploadedFile> fileList = new ArrayList<UploadedFile>();
+        for (int i = 0; i < 5; i++) {
+            UploadedFile f = new UploadedFile();
+            f.url = "http://foo" + i + ".com";
+            f.description = "foo" + i;
+            f.notes = "foo\nbar\n"+i;
+            fileList.add(f);
+        }
 
 		patientDomainWrapper.setPatient(patient);
 
 		model.addAttribute("patient", patientDomainWrapper);
-		model.addAttribute("files", personList);
+		model.addAttribute("files", fileList);
         model.addAttribute("defaultDescriptions", 
             administrationService.getGlobalProperty("filemanager.defaultDescriptions"));
 	}
