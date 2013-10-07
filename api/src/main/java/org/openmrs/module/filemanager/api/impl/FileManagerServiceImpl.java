@@ -93,7 +93,7 @@ public class FileManagerServiceImpl extends BaseOpenmrsService implements FileMa
 
 		Obs notesObs = new Obs(patient, fileNotesConcept, date, location);
 		notesObs.setValueText(notes);
-		descriptionObs.setEncounter(encounter);
+		notesObs.setEncounter(encounter);
 		obsService.saveObs(notesObs, null);
 
 		Obs fileObs = new Obs(patient, conceptComplex, date, location);

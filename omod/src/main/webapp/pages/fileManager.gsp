@@ -38,7 +38,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
         </tr>
         <% } %>
         <% files.each { f -> %>
-        ${ ui.includeFragment("filemanager", "uploadedFile") }
+
         <tr id="visit">
             <td>${f.url}</td>
             <td>${f.description}</td>
@@ -60,7 +60,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
             var descriptions = "${defaultDescriptions}";
             return descriptions.split(',');
         },
-        //prefetch: '${ui.resourceLink("filemanager", "filetypes.json")}', 
+        prefetch: '${ui.resourceLink("filemanager", "filetypes.json")}',
         items: 3
     })
 </script>
