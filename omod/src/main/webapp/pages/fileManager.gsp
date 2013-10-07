@@ -14,7 +14,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
         <form class="simple-form-ui" id="uploadFile" method="post"
         enctype="multipart/form-data">
             <input type="file" name="file" id="file" multiple="true">
-            <input type="text" id="typeahead" data-provide="typeahead"
+            <input type="text" name="description" id="typeahead" data-provide="typeahead"
                 placeholder="Description">
             <textarea name="notes" placeholder="Notes"></textarea>
 
@@ -38,6 +38,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
         </tr>
         <% } %>
         <% files.each { f -> %>
+        ${ ui.includeFragment("filemanager", "uploadedFile") }
         <tr id="visit">
             <td>${f.url}</td>
             <td>${f.description}</td>
