@@ -1,33 +1,21 @@
 package org.openmrs.module.filemanager.page.controller;
 
-import org.openmrs.Person;
 import org.openmrs.Patient;
-<<<<<<< HEAD
-import org.openmrs.api.context.Context;
-import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
-import org.openmrs.module.filemanager.api.FileManagerService;
-=======
+import org.openmrs.Person;
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
 import org.openmrs.module.filemanager.api.FileManagerService;
-import org.openmrs.module.filemanager.api.impl.FileManagerServiceImpl;
-import org.openmrs.ui.framework.SimpleObject;
->>>>>>> 2029ebc5e2e43cc66d998c9119ec71cc5c78caee
 import org.openmrs.ui.framework.UiUtils;
-import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.annotation.InjectBeans;
 import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.web.WebConstants;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,35 +45,6 @@ public class FileManagerPageController {
 		model.addAttribute("files", personList);
 	}
 
-<<<<<<< HEAD
-    public String post(@RequestParam(value = "patientId", required = false) Patient patient,
-                       @RequestParam(value = "returnUrl", required = false) String returnUrl,
-                       UiUtils ui,
-                       HttpServletRequest request, PageModel model) throws IOException {
-        if (request instanceof MultipartHttpServletRequest) {
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            MultipartFile file = multipartRequest.getFile("file");
-            if (!file.isEmpty()) {
-                if (file.getSize() <= 5242880) {
-                    try {
-                        FileOutputStream fos = new FileOutputStream("/home/gitahi/aaaaa2.jpg");
-                        fos.write(file.getBytes());
-                        fos.close();
-                    } catch (Exception ex) {
-
-                    }
-                } else {
-                    request.getSession().setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
-                            "feedback.notification.feedback.error");
-                    return null;
-                }
-            }
-            FileManagerService fileManagerService= Context.getService(FileManagerService.class);
-            fileManagerService.saveComplexObs(null,null,null,null,null);
-        }
-        return null;
-    }
-=======
 	public String post(@RequestParam("patientId") Patient patient,
 					   @RequestParam("visitId") Visit visit,
 					   @RequestParam(value = "returnUrl", required = false) String returnUrl,
@@ -116,5 +75,4 @@ public class FileManagerPageController {
 		params.put("returnUrl", returnUrl);
 		return "redirect:" + ui.pageLink("filemanager", "fileManager", params);
 	}
->>>>>>> 2029ebc5e2e43cc66d998c9119ec71cc5c78caee
 }
