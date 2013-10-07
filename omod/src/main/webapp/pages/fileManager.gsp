@@ -26,9 +26,9 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
 <table>
     <thead>
         <tr>
-            <th>${ui.message("filemanager.upload.date")}</th>
-            <th>${ui.message("filemanager.upload.type")}</th>
-            <th>${ui.message("filemanager.upload.file")}</th>
+            <th>${ui.message("filemanager.upload.name")}</th>
+            <th>${ui.message("filemanager.upload.description")}</th>
+            <th>${ui.message("filemanager.upload.notes")}</th>
         </tr>
     </thead>
     <tbody>
@@ -40,7 +40,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
         <% files.each { f -> %>
 
         <tr id="visit">
-            <td>${f.url}</td>
+            <td>${f.name}</td>
             <td>${f.description}</td>
             <td>${f.notes}</td>
         </tr>
