@@ -1,6 +1,8 @@
 <%
 ui.decorateWith("appui", "standardEmrPage")
 ui.includeJavascript("uicommons", "typeahead.js");
+ui.includeJavascript("filemanager", "upload.js");
+ui.includeCss("filemanager", "upload.css");
 %>
 
 ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ]) }
@@ -35,15 +37,11 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient ])
             <td colspan="4">${ui.message("coreapps.none")}</td>
         </tr>
         <% } %>
-        <% files.each { f ->
-            def date = f.birthdate
-            def type = f.gender
-            def link = f.personVoidReason
-        %>
-        <tr id="visit-${f.personId}">
-            <td>${ui.format(date)}</td>
-            <td>${ui.format(type)}</td>
-            <td>${ui.format(link)}</td>
+        <% files.each { f -> %>
+        <tr id="visit">
+            <td>${f.url}</td>
+            <td>${f.description}</td>
+            <td>${f.notes}</td>
         </tr>
         <% } %>
     </tbody>

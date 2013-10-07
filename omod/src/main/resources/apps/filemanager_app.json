@@ -1,13 +1,7 @@
 [
     {
         "id": "${project.parent.artifactId}.app",
-        "description": "Add documents or files to a patient's",
-        "extensionPointId": "patientDashboard.visitActions",
-        "type": "link",
-        "label": "filemanager.label",
-        "url": "filemanager/fileManager.page?patientId={{patientId}}&visitId={{visit.id}}",
-        "icon": "icon-file",
-        "requiredPrivilege": "App: some random privilege",
-        "order": "500"
+        "description": "Helps upload patient files on OpenMRS",
+        "extensions": []
     }
 ]

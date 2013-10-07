@@ -1,0 +1,12 @@
+[
+	{
+		"id": "${project.parent.artifactId}.appId",
+		"extensionPointId": "patientDashboard.visitActions",
+		"type": "link",
+		"label": "filemanager.label",
+		"url": "filemanager/fileManager.page?patientId={{patientId}}&visitId={{visit.id}}",
+		"icon": "icon-file",
+		"requiredPrivilege": "App: some random privilege",
+		"order": "500"
+	}
+]
