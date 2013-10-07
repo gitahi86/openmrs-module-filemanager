@@ -7,6 +7,7 @@ import org.openmrs.Visit;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
+import org.openmrs.module.filemanager.UploadedFile;
 import org.openmrs.module.filemanager.api.FileManagerService;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.InjectBeans;
@@ -61,12 +62,10 @@ public class FileManagerPageController {
 			if (!file.isEmpty()) {
 				if (file.getSize() <= 5242880) {
 					try {
-						Encounter encounter = Context.getService(FileManagerService.class).saveComplexObs(patient, visit, file,"File Description", "File Notes");
-						FileOutputStream fos = new FileOutputStream("/home/gitahi/aaaaa2.jpg");
-						fos.write(file.getBytes());
-						fos.close();
+						Encounter encounter = Context.getService(FileManagerService.class).saveComplexObs(patient, visit, file,
+								request.getParameter("description"), request.getParameter("notes"));
 					} catch (Exception ex) {
-
+						System.out.println(ex.getMessage());
 					}
 				} else {
 					request.getSession().setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
