@@ -15,6 +15,21 @@
 	<require_version>${openMRSVersion}</require_version>
 	<!-- / Module Properties -->
 
+	<globalProperty>
+		<property>filemanager.defaultDescriptions</property>
+		<description>Suggested descriptions of an uploaded file.</description>
+
+		<defaultValue>Pathology Report,Radiology Report,Radiology Image,Laboratory Result,Referral,Discharge Report</defaultValue>
+	</globalProperty>
+
+	<globalProperty>
+		<property>filemanager.storedFileConceptId</property>
+		<description>ID of the Concept used to reference uploaded files in the
+			encounter.</description>
+
+		<defaultValue>0</defaultValue>
+	</globalProperty>
+
 
 	<!-- Required Modules -->
 	<require_modules>

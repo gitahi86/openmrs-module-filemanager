@@ -2,6 +2,8 @@ package org.openmrs.module.filemanager.page.controller;
 
 import org.openmrs.Person;
 import org.openmrs.Patient;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
@@ -20,6 +22,8 @@ import java.util.List;
 
 
 public class FileManagerPageController {
+
+    private AdministrationService administrationService = Context.getAdministrationService();
 
 	public void controller(@RequestParam("patientId") Patient patient,
                            PageModel model,
@@ -40,6 +44,8 @@ public class FileManagerPageController {
         model.addAttribute("patient", patientDomainWrapper);
 //		model.addAttribute("user", sessionContext.getCurrentUser());
 		model.addAttribute("files", personList);
+        model.addAttribute("defaultDescriptions", 
+            administrationService.getGlobalProperty("filemanager.defaultDescriptions"));
 	}
 
     public String post(@RequestParam(value = "patientId", required = false) Patient patient,
